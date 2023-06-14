@@ -1,4 +1,38 @@
-CONTACTS = {}
+from collections import UserDict
+
+
+class AddressBook(UserDict):
+    def __init__(self):
+        self = {}
+
+    def add_record(self, name, phone=None):
+        Record.name.name = name
+
+
+class Record:
+    def __init__(self, name, phone):
+        self.name = name  # клас Name
+        self.phones = []
+        self.phone = phone  # клас Phone
+
+
+class Field:
+    def __init__(self, name, phone=None):
+        self.name = name
+        self.phone = phone
+
+
+class Name(Field):
+    def __init__(self, name):
+        self.name = name
+
+
+class Phone(Field):
+    def __init__(self, phone):
+        self.phone = phone
+
+
+CONTACTS = AddressBook()
 
 
 def hello():
