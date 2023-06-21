@@ -5,8 +5,8 @@ class AddressBook(UserDict):
     def __init__(self):
         self = {}
 
-    def add_record(self, name, phone=None):
-        Record.name.name = name
+    def add_record(self, record):
+        Record.name.name
 
 
 class Record:
@@ -17,22 +17,23 @@ class Record:
 
 
 class Field:
-    def __init__(self, name, phone=None):
+    def __init__(self, name, phone=None, e_mail=None):
         self.name = name
         self.phone = phone
+        self.e_mail = e_mail
 
 
 class Name(Field):
     def __init__(self, name):
-        self.name = name
+        super().__init__(name)
 
 
 class Phone(Field):
     def __init__(self, phone):
-        self.phone = phone
+        super().__init__(phone)
 
 
-CONTACTS = AddressBook()
+CONTACTS = {}
 
 
 def hello():
