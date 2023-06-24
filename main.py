@@ -2,18 +2,29 @@ from collections import UserDict
 
 
 class AddressBook(UserDict):
-    def __init__(self):
-        self = {}
-
-    def add_record(self, record):
-        Record.name.name
+    def add_record(self, Record):
+        self.update({Record.Name.name: Record})
 
 
 class Record:
-    def __init__(self, name, phone):
-        self.name = name  # клас Name
-        self.phones = []
-        self.phone = phone  # клас Phone
+    def __init__(self, Name, *Phones):
+        self.Name = Name
+        self.Phones = list(Phones)
+
+    def add_phone(self, name_and_numbers):
+        name_and_numbers = name_and_numbers.split(' ')
+        self.Phones = list(set(self.Phones) | set(name_and_numbers[1:]))
+        return "Done!"
+
+    def change_phone(self, name_and_numbers):
+        name_and_numbers = name_and_numbers.split(' ')
+        self.Phones = name_and_numbers[1:]
+        return "Done!"
+
+    def delite_phone(self, name_and_numbers):
+        name_and_numbers = name_and_numbers.split(' ')
+        self.Phones = list(set(self.Phones) - set(name_and_numbers[1:]))
+        return "Done!"
 
 
 class Field:
@@ -33,7 +44,7 @@ class Phone(Field):
         super().__init__(phone)
 
 
-CONTACTS = {}
+CONTACTS = AddressBook()
 
 
 def hello():
@@ -67,7 +78,7 @@ def input_error(func):
                 result = func()
                 flag = False
             except IndexError:
-                print('Enter the name and number separated by a space.')
+                print('Enter the name and numbers separated by a space.')
             except ValueError:
                 print('I have no idea how you did it, try again.')
             except KeyError:
@@ -84,8 +95,10 @@ def main():
         if command == 'hello':
             print(hello())
         elif 'add' in command:
-            print(add_or_change_contact(
-                command.removeprefix('add ')))
+            print(AddressBook.add_record(
+                Record.add_phone(command.removeprefix('add '))))
+#            print(add_or_change_contact(
+#                command.removeprefix('add ')))
         elif "change" in command:
             print(add_or_change_contact(
                 command.removeprefix('change ')))
@@ -97,7 +110,7 @@ def main():
                     print(contact)
             else:
                 print('The contact list is empty.')
-        elif command in ("good bye", "close", "exit"):
+        elif command in ("good bye", "bye", "close", "exit"):
             print(close())
             bot_status = False
         else:
