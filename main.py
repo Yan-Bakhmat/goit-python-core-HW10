@@ -56,21 +56,6 @@ def hello():
     return 'How can I help you?'
 
 
-# def add_or_change_contact(name_and_number):
-#    name_and_number = name_and_number.split(' ')
-#    CONTACTS[name_and_number[0]] = name_and_number[1]
-#    return "Done!"
-
-
-# def show_number(name):
-#    return CONTACTS[name]
-
-
-# def show_all(contacts):
-#    for name, number in contacts.items():
-#        yield f'{name}: {number}'
-
-
 def close():
     return "Good bye!"
 
