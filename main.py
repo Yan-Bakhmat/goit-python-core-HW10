@@ -4,34 +4,39 @@ from collections import UserDict
 class AddressBook(UserDict):
     def add_record(self, Record):
         self.update({Record.Name.name: Record})
+        return "Done!"
+
+    def show_number(self, Name):
+        return self.data[Name.name].Phones.phone
+
+    def show_all(self):
+        for name, numbers in self.data.items():
+            yield f'{name}: {numbers.Phones.phone}'
 
 
 class Record:
-    def __init__(self, Name, *Phones):
+    def __init__(self, Name, Phones=None):
         self.Name = Name
-        self.Phones = list(Phones)
+        self.Phones = Phones
 
-    def add_phone(self, name_and_numbers):
-        name_and_numbers = name_and_numbers.split(' ')
-        self.Phones = list(set(self.Phones) | set(name_and_numbers[1:]))
+    def add_phone(self, Phone):
+        self.Phones.phone = list(set(self.Phones.phone) | set(Phone.phone))
         return "Done!"
 
-    def change_phone(self, name_and_numbers):
-        name_and_numbers = name_and_numbers.split(' ')
-        self.Phones = name_and_numbers[1:]
+    def change_phone(self, Phone):
+        self.Phones = Phone
         return "Done!"
 
-    def delite_phone(self, name_and_numbers):
-        name_and_numbers = name_and_numbers.split(' ')
-        self.Phones = list(set(self.Phones) - set(name_and_numbers[1:]))
+    def delite_phone(self, Phone):
+        self.Phones.phone = list(set(self.Phones.phone) - set(Phone.phone))
         return "Done!"
 
 
 class Field:
-    def __init__(self, name, phone=None, e_mail=None):
-        self.name = name
-        self.phone = phone
-        self.e_mail = e_mail
+    def __init__(self, name_and_number):
+        name_and_number = name_and_number.split(' ')
+        self.name = name_and_number[0]
+        self.phone = name_and_number[1:]
 
 
 class Name(Field):
@@ -51,19 +56,19 @@ def hello():
     return 'How can I help you?'
 
 
-def add_or_change_contact(name_and_number):
-    name_and_number = name_and_number.split(' ')
-    CONTACTS[name_and_number[0]] = name_and_number[1]
-    return "Done!"
+# def add_or_change_contact(name_and_number):
+#    name_and_number = name_and_number.split(' ')
+#    CONTACTS[name_and_number[0]] = name_and_number[1]
+#    return "Done!"
 
 
-def show_number(name):
-    return CONTACTS[name]
+# def show_number(name):
+#    return CONTACTS[name]
 
 
-def show_all(contacts):
-    for name, number in contacts.items():
-        yield f'{name}: {number}'
+# def show_all(contacts):
+#    for name, number in contacts.items():
+#        yield f'{name}: {number}'
 
 
 def close():
@@ -95,18 +100,26 @@ def main():
         if command == 'hello':
             print(hello())
         elif 'add' in command:
-            print(AddressBook.add_record(
-                Record.add_phone(command.removeprefix('add '))))
-#            print(add_or_change_contact(
-#                command.removeprefix('add ')))
+            command = command.removeprefix('add ')
+            if Name(command).name in CONTACTS.data:
+                print(CONTACTS.data[Name(command).name].add_phone(
+                    Phone(command)))
+            else:
+                print(CONTACTS.add_record(Record(Name(command), Phone(command))))
         elif "change" in command:
-            print(add_or_change_contact(
-                command.removeprefix('change ')))
+            command = command.removeprefix('change ')
+            print(CONTACTS.data[Name(command).name].change_phone(
+                Phone(command)))
+        elif "delite" in command:
+            command = command.removeprefix('delite ')
+            print(CONTACTS.data[Name(command).name].delite_phone(
+                Phone(command)))
         elif "phone" in command:
-            print(show_number(command.removeprefix("phone ")))
+            command = command.removeprefix("phone ")
+            print(CONTACTS.show_number(Name(command)))
         elif command == "show all":
             if CONTACTS:
-                for contact in show_all(CONTACTS):
+                for contact in CONTACTS.show_all():
                     print(contact)
             else:
                 print('The contact list is empty.')
